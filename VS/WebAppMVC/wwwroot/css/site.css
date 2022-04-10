@@ -1,0 +1,134 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Carousel */
+.carousel-caption p {
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+/* Make .svg files in the carousel display properly in older browsers */
+.carousel-inner .item img[src$=".svg"] {
+    width: 100%;
+}
+
+/* QR code generator */
+#qrCode {
+    margin: 15px;
+}
+
+/* Hide/rearrange for smaller screens */
+@media screen and (max-width: 767px) {
+    /* Hide captions */
+    .carousel-caption {
+        display: none;
+    }
+}
+
+/* Price oldalhoz */
+.frame {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.ctrllabel {
+    font-weight: 700;
+}
+
+@media (min-width: 990px) {
+    .cols-sample-area .row .col-md-6 {
+        width: 43.71%;
+    }
+}
+
+@media (min-width: 1200px) {
+    .cols-sample-area .row .col-lg-6 {
+        width: 45.71%;
+    }
+}
+
+@media (max-width: 992px) {
+    .cols-sample-area .row .col-sm-12:nth-child(2),
+    .cols-sample-area .row .col-xs-12:nth-child(2),
+    .cols-sample-area .row .col-md-6:nth-child(2) {
+        padding-top: 30px;
+    }
+}
+
+/* LOADER */
+#loaderx {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    z-index: 9999;
+    width: 150px;
+    height: 150px;
+    margin: -75px 0 0 -75px;
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    width: 120px;
+    height: 120px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+}
+
+#loader {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    z-index: 9999;
+    margin: -100px 0 0 -100px;
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    width: 200px;
+    height: 200px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+}
+
+#HideEverything {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    z-index: 8888;
+    background-color: #1976D2;
+    opacity: 0.5;
+}
+
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+/* LOADER END */
+
+#favorite1 {
+    color: #fcff00;
+}

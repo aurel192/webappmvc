@@ -1,0 +1,278 @@
+﻿@model IEnumerable<DbConnectionClassLib.ResponseClasses.ListViewListItem>
+
+@{
+    ViewData["Title"] = "Compare Instruments";
+}
+
+<div style="text-align:center;">
+    <h3>Compare Instruments</h3>
+</div>
+
+<div class="row" style="width:100%;">
+    <div class="frame" style="width:100%;">
+
+        <ul class="nav nav-tabs">
+            <li class="active"><a id="tab_list" data-toggle="tab" href="#price">Instrument</a></li>
+            <li><a id="tab_si" data-toggle="tab" href="#si">Selected Instruments<span id="tab_si_badge" class="badge">0</span></a></li>
+            <li><a id="tab_dr" data-toggle="tab" href="#dr">Date Range</a></li>
+            <li><a id="tab_comparechart" data-toggle="tab" href="#comparechart">Chart</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="price" class="tab-pane fade in active">
+                <h3 id="label_instrumentlist">Instrument</h3>
+                <div class="row">
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <div id="listview"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default btn-sm" id="addBtn" onclick="addInstrument()">Add Instrument</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="si" class="tab-pane fade">
+                <h3 id="label_selectedinstruments">Selected Instruments</h3>
+                <div class="row">
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <div id="listviewselected"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default btn-sm" id="rmvBtn" onclick="removeInstrument()">Remove</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="buttonsdiv" style="text-align:center;margin-top:15px;">
+                    <div class="row">
+                        <button type="button" class="btn btn-default btn-xs" id="1dBtn" onclick="setDateRange('1d','compare')">1d</button>
+                        <button type="button" class="btn btn-default btn-xs" id="5dBtn" onclick="setDateRange('5d','compare')">5d</button>
+                        <button type="button" class="btn btn-default btn-xs" id="1mBtn" onclick="setDateRange('1m','compare')">1m</button>
+                        <button type="button" class="btn btn-default btn-xs" id="3mBtn" onclick="setDateRange('3m','compare')">3m</button>
+                        <button type="button" class="btn btn-default btn-xs" id="6mBtn" onclick="setDateRange('6m','compare')">6m</button>
+                        <button type="button" class="btn btn-default btn-xs" id="1yBtn" onclick="setDateRange('1y','compare')">1y</button>
+                        <button type="button" class="btn btn-default btn-xs" id="5yBtn" onclick="setDateRange('5y','compare')">5y</button>
+                        <button type="button" class="btn btn-default btn-xs" id="10yBtn" onclick="setDateRange('10y','compare')">10y</button>
+                        <button type="button" class="btn btn-default btn-xs" id="maxBtn" onclick="setDateRange('max','compare')">max</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="dr" class="tab-pane fade">
+                <h3 id="label_comparedaterange">Date Range</h3>
+                <div class="row">
+                    <div class="col-sm-12 col-xs-12 col-md-6 col-lg-6">
+                        <div class="form-inline" style="margin-top:15px;">
+                            <div class="form-group">
+                                <label for="from">From:</label>
+                                <input type="text" class="form-control" id="datepickerFrom" name="datepickerFrom">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-xs-12 col-md-6 col-lg-6">
+                        <div class="form-inline" style="margin-top:15px;">
+                            <div class="form-group">
+                                <label for="to">To:</label>
+                                <input type="text" class="form-control" id="datepickerTo" name="datepickerTo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align:center;margin-top:15px;">
+                    <div class="row">
+                        <button id="loadBtn" type="button" class="btn btn-primary" onclick="GetCompareData()">Load Chart</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="comparechart" class="tab-pane fade">
+                <h3 id="label_comparechart">Chart</h3>
+                <div class="row">
+                    <div id="chartframe">
+                        <div id="container"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<div id="chartframe" class="row" style="width:100%;">
+    <div id="container"></div>
+</div>
+
+<div id="annotationsdiv" style="display:none"></div>
+<a id="hrefbuttonsdiv" href="#buttonsdiv" style="visibility:hidden;"></a>
+
+
+<script>
+    $(function() {
+        MobileUI();
+    });
+    var cntr = 0;
+    var selectedNumber = 0;
+    var container = document.getElementById('container');
+    var annotationsdiv = document.getElementById('annotationsdiv');
+    var now = new Date();
+    var yearAgo = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+    var nowStr = now.getFullYear() + '.' + (now.getMonth() + 1).toString().padStart(2, '0') + '.' + now.getDate().toString().padStart(2, '0');
+    var yearAgoStr = yearAgo.getFullYear() + '.' + (yearAgo.getMonth() + 1).toString().padStart(2, '0') + '.' + yearAgo.getDate().toString().padStart(2, '0');
+    var valueStr = yearAgoStr + ' - ' + nowStr;
+
+    var datepickerFrom = new ej2.calendars.DatePicker({
+        format: 'yyyy-MM-dd',
+        width: '100%',
+        value: yearAgo,
+    });
+    datepickerFrom.appendTo('#datepickerFrom');
+
+    var datepickerTo = new ej2.calendars.DatePicker({
+        format: 'yyyy-MM-dd',
+        width: '100%',
+        value: now,
+    });
+    datepickerTo.appendTo('#datepickerTo');
+
+
+    var ds = @Html.Raw(Json.Serialize(Model));
+    //console.log('ds',ds);
+    var nestedListObj = new ej2.lists.ListView({        
+        //Map appropriate columns to fields property
+        fields: { /*iconCss: 'icon',*/ tooltip: 'text', id: 'id' },   
+        //Set defined data to dataSource property
+        dataSource:  ds,
+        //Set true to show icons
+        showIcon: false,
+        //Set header title
+        headerTitle: 'Instruments',
+        height: 300,
+        //Set true to show header title
+        showHeader: true
+    });
+    //Render initialized ListView component
+    nestedListObj.appendTo('#listview');
+
+    var selectedItems = [];
+    var selectedListObj = new ej2.lists.ListView({        
+        fields: { tooltip: 'text', id: 'id' },
+        dataSource:  selectedItems,
+        showIcon: false,
+        headerTitle: 'Selected Instruments',
+        height: 100,
+        showHeader: true
+    });
+    //Render initialized ListView component
+    selectedListObj.appendTo('#listviewselected');
+
+    function addInstrument() {
+        var selected = nestedListObj.getSelectedItems();
+        //console.log('selected',selected);
+        if (!(selected && selected.data && selected.data.id && selected.data.id.length > 2 && selected.data.id.indexOf('/') > 0)) {
+            toastr.error('Select an instrument!');
+            return;
+        }
+        var alreadyInList = selectedListObj.dataSource.filter(
+            function(item){
+                return (item.id == selected.data.id);
+            }
+        );
+        if (alreadyInList.length != 0) {
+            toastr.error('The selected item is already in the list!');
+            return;
+        }
+        selectedNumber++;
+        setTimeout(function(){
+            setHeight();
+        }, 300);
+        selectedListObj.addItem(selected.data);
+    }
+
+    function removeInstrument() {
+        var selected = selectedListObj.getSelectedItems();
+        if (!(selected && selected.data && selected.data.id && selected.data.id.length > 2 && selected.data.id.indexOf('/') > 0)) {
+            toastr.error('Select an instrument!');
+            return;
+        }
+        selectedNumber--;
+        setTimeout(function(){
+            setHeight();
+        }, 300);
+        selectedListObj.removeItem(selected.data);
+    }
+
+    function GetCompareData(){
+        ResetButtonsStyle();
+        if (!(selectedListObj.dataSource.length > 0)) {
+            toastr.error('Select at least one instrument!');
+            return false;
+        }
+        EnableButtons(false);
+        document.getElementById("tab_comparechart").click();
+        var df = new Date(datepickerFrom.value);
+        var dt = new Date(datepickerTo.value);
+        var data = {
+            formData: [],
+            startDateStr: df.getFullYear() + '-' + pad(df.getMonth() + 1,2) + '-' + pad(df.getDate(),2),
+            endDateStr: dt.getFullYear() + '-' + pad(dt.getMonth() + 1,2) + '-' + pad(dt.getDate(),2)
+        };
+        selectedListObj.dataSource.forEach(function(e) {
+            data.formData.push({type: e.instumentType, instrumentFullPath: e.id, instrumentName: e.text});
+        });
+        //console.log('GetCompareData data', data);
+        AjaxCall('POST', '/api/CompareInstruments/', data, function (data, error) {
+            //console.log('CompareInstruments response', response);
+            if (data === false) {
+                ResetButtonsStyle();
+                EnableButtons(true);
+                return false;
+            }
+            var originalTitle = document.title;
+            document.title = "DRAWING CHART...";
+            initAxes('compare');
+            initSeriesArray(data.percentData);
+
+            for (var i = 0; i < data.dateTimeData.points.length; i++) {
+                var d = data.dateTimeData.points[i].substring(0, 10);
+                for (var pd = 0; pd < data.percentData.length; pd++) {
+                    //console.log('data.percentData[pd].points['+i+']', data.percentData[pd].points[i]);
+                    seriesArray[pd].points.push({ x: d, y: data.percentData[pd].points[i] });
+                }
+            }
+            PriceAxis.range = {};
+            PriceAxis.range.min = data.min;
+            PriceAxis.range.max = data.max;
+            //PriceAxis.range.interval = 1; //TODO
+            //console.log('seriesArray', seriesArray);
+
+            RemoveElements('container');
+
+            var id = 'chart' + ++cntr;
+            var newDiv = document.createElement("div");
+            newDiv.id = id;
+            newDiv.name = id;
+            container.appendChild(newDiv);
+            var chartHeight = height - 137;
+            var title = data.dateFrom.substring(0, 10) + ' - ' + data.dateTo.substring(0, 10);
+            legendVisible = true;
+            MultipleAxesChart('#chart' + cntr, title, '', false, chartHeight, '100%');
+            EnableButtons(true);
+            document.getElementById("hrefbuttonsdiv").click();
+            document.title = originalTitle;
+        });
+        return true;
+    }
+
+
+</script>

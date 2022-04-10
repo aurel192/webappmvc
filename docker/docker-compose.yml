@@ -1,0 +1,39 @@
+version: '2'
+
+services:
+  mysqlserver:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "Qwe123!!!Qwe123!!!"
+    ports:
+    - "3306:3306"
+    volumes:
+    - mydata:/var/lib/mysql
+    networks:
+    - back
+
+  webappmvc:
+    image: webappmvc
+    restart: always
+    ports:
+    - "80:80"
+    networks:
+    - back
+    depends_on:
+    - mysqlserver
+    
+  consoleapp:
+    image: consoleapp
+    restart: always
+    networks:
+    - back
+    depends_on:
+    - mysqlserver
+
+
+volumes:
+  mydata:
+
+networks:
+  back:

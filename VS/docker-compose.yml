@@ -1,0 +1,35 @@
+version: '3.4'
+
+services:
+  mysqlserver:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "Qwe123!!!Qwe123!!!"
+    ports:
+    - "33306:3306"
+    volumes:
+    - mydata:/var/lib/mysql
+
+  webappmvc:
+    image: webappmvc
+    restart: always
+    ports: 
+    - "8000:8000"
+    build:
+      context: .
+      dockerfile: WebAppMVC/Dockerfile
+    links:
+    - mysqlserver
+
+  consoleapp:
+    image: consoleapp
+    restart: always
+    build:
+      context: .
+      dockerfile: ConsoleApp/Dockerfile
+    links:
+    - mysqlserver
+
+volumes:
+  mydata:

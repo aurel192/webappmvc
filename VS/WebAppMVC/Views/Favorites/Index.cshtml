@@ -1,0 +1,162 @@
+﻿@model IEnumerable<DbConnectionClassLib.ResponseClasses.ListViewListItem>
+
+@{
+    ViewData["Title"] = "Favorites";
+}
+
+<div style="text-align:center;">
+    <h3>Favorites</h3>
+</div>
+
+<div class="row" style="width:100%;">
+    <div class="frame" style="width:100%;">
+
+        <ul class="nav nav-tabs">
+            <li class="active"><a id="tab_list" data-toggle="tab" href="#price">Instrument</a></li>
+            <li><a id="tab_si" data-toggle="tab" href="#si">Favorite Instruments<span id="tab_si_badge" class="badge">0</span></a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="price" class="tab-pane fade in active">
+                <h3 id="label_instrumentlist">Instrument</h3>
+                <div class="row">
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <div id="listview"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default btn-sm" id="addBtn" onclick="addInstrument()">Add to Favorites</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="si" class="tab-pane fade">
+                <h3 id="label_selectedinstruments">Favorite Instruments</h3>
+                <div class="row">
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <div id="listviewselected"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default btn-sm" id="rmvBtn" onclick="removeInstrument()">Remove</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    var selectedNumber = 0;
+    $(function() {
+        MobileUI();
+    });
+    var ds = @Html.Raw(Json.Serialize(Model));
+    var listViewHeight = (landscape ? (height - 170) : (height - 220));
+    //console.log('ds',ds);
+    var nestedListObj = new ej2.lists.ListView({        
+        //Map appropriate columns to fields property
+        fields: { /*iconCss: 'icon',*/ tooltip: 'text', id: 'id' },   
+        //Set defined data to dataSource property
+        dataSource:  ds,
+        //Set true to show icons
+        showIcon: false,
+        //Set header title
+        headerTitle: 'Instruments',
+        height: listViewHeight,
+        //Set true to show header title
+        showHeader: true
+    });
+    //Render initialized ListView component
+    nestedListObj.appendTo('#listview');
+
+    var selectedItems = [];
+    var selectedListObj = null;
+    AjaxCall('GET', '/api/GetFavorites/', null, function (response, error) {
+        response.forEach(function(fav) {
+            selectedItems.push({text: fav.name, id: fav.type});
+        });
+        selectedListObj = new ej2.lists.ListView({
+            fields: { tooltip: 'text', id: 'id' },
+            dataSource:  selectedItems,
+            showIcon: false,
+            headerTitle: 'My Favorites',
+            height: listViewHeight,
+            showHeader: true
+        });
+        selectedNumber = response.length;
+        setTimeout(function(){
+            SetFavoriteNumberBadge();
+        }, 300);
+        //Render initialized ListView component
+        selectedListObj.appendTo('#listviewselected');
+    });
+
+    function addInstrument() {
+        var selected = nestedListObj.getSelectedItems();
+        //console.log('selected',selected);
+        if (!(selected && selected.data && selected.data.id && selected.data.id.length > 0 && selected.data.id.indexOf('/') > 0)) {
+            toastr.error('Select an instrument!');
+            return;
+        }
+        var alreadyInList = selectedListObj.dataSource.filter(
+            function(item){
+                return (item.id == selected.data.id);
+            }
+        );
+        if (alreadyInList.length != 0) {
+            toastr.error('The selected item is already in the list!');
+            return;
+        }
+        var data = {
+            UserId: null,
+            User: null,
+            Type: selected.data.id,
+            Name: selected.text,
+        }
+        AjaxCall('POST', '/api/AddToFavorites/', data, function (response, error) {
+            selectedListObj.dataSource = [];
+            response.forEach(function(fav) {
+                selectedListObj.dataSource.push({text: fav.name, id: fav.type});
+            });
+            selectedNumber = response.length;
+            setTimeout(function(){
+                SetFavoriteNumberBadge();
+            }, 300);
+        });
+    }
+
+    function removeInstrument() {
+        var selected = selectedListObj.getSelectedItems();
+        if (!(selected && selected.data && selected.data.id && selected.data.id.length > 2 && selected.data.id.indexOf('/') > 0)) {
+            toastr.error('Select an instrument!');
+            return;
+        }
+        var data = {
+            UserId: null,
+            User: null,
+            Type: selected.data.id,
+            Name: selected.text,
+        }
+        AjaxCall('POST', '/api/RemoveFavorite/', data, function (response, error) {
+            selectedListObj.dataSource = [];
+            response.forEach(function(fav) {
+                selectedListObj.dataSource.push({text: fav.name, id: fav.type});
+            });
+            selectedNumber = response.length;
+            setTimeout(function(){
+                SetFavoriteNumberBadge();
+            }, 300);
+        });
+    }
+</script>

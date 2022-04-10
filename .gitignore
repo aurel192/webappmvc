@@ -1,0 +1,46 @@
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# User-specific files (MonoDevelop/Xamarin Studio)
+*.userprefs
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+**/Properties/launchSettings.json
+
+# NuGet Packages
+*.nupkg
+# The packages folder can be ignored because of Package Restore
+**/[Pp]ackages/*
+# except build/, which is used as an MSBuild target.
+!**/[Pp]ackages/build/
+# Uncomment if necessary however generally it will be regenerated when needed
+#!**/[Pp]ackages/repositories.config
+# NuGet v3's project.json files produces more ignorable files
+*.nuget.props
+*.nuget.targets
+.vs/WebAppMVC/v15/Server/sqlite3/
+docker/image.tar
+VS/.vs/WebAppMVC/v15/Server/sqlite3/
+VS/WebAppMVC/wwwroot/css/ej.web.all.min.css
+VS/WebAppMVC/wwwroot/js/ej.web.all.min.js
+VS/.vs/WebAppMVC/DesignTimeBuild/.dtbcache
+*.tar
+etc/

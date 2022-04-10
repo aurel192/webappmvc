@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' />
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
+    <title>@ViewData["Title"] - Work In Progress    build: @HelperClassLib.Helpers.HelperClass.GetRevision()</title>
+
+    <!--
+    <link href="https://cdn.syncfusion.com/ej2/ej2-buttons/styles/material.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.syncfusion.com/ej2/ej2-buttons/dist/global/ej2-buttons.min.js" type="text/javascript"></script>
+    <script src="~/js/ej2.min.js"></script>
+    <script src="~/js/ej2-dropdowns.min.js"></script>
+    <link href="~/css/ej2-dropdowns-material.css" rel="stylesheet" />
+    -->
+    <!-- JQUERY, BOOTSTRAP ETC -->
+    <script src="~/js/modernizr-2.6.2.js"></script>
+    <script src="~/js/jquery-3.2.1.min.js"></script>
+    <script src="~/js/bootstrap.js"></script>
+    <script src="~/js/respond.js"></script>
+
+
+
+    <!-- SYNCFUSION EJ 1 -->
+    <!--
+    <link href="https://cdn.syncfusion.com/16.1.0.24/js/web/flat-azure/ej.web.all.min.css" rel="stylesheet" />
+    <script src="~/js/properties.js"></script>
+    -->
+    <script src="https://cdn.syncfusion.com/16.1.0.24/js/web/ej.web.all.min.js" type="text/javascript"></script>
+
+
+
+
+    <!-- OTHER -->
+    <script src="~/js/scripts.js"></script>
+    <script src="~/js/chartscript.js"></script>
+    <script src="~/js/ej2chart.js"></script>
+    <!--<link href="~/css/ej.theme.min.css" rel="stylesheet" />-->
+    <link href="~/css/sf-default.css" rel="stylesheet" />
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.9/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.9/sweetalert2.min.css">
+    <link rel="stylesheet" href="~/css/site.css" />
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://jqueryui.com/resources/demos/style.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+
+    <!-- SYNCFUSION EJ 2 -->
+    <!--
+    <script src="~/js/ej2-base.min.mod.js"></script>
+    <script src="~/js/ej2-dropdowns.min.mod.js"></script>
+    <script src="~/js/ej2-buttons.min.mod.js"></script>
+    <script src="http://cdn.syncfusion.com/ej2/dist/ej2.min.js" type="text/javascript"></script>
+    -->
+    <script src="~/js/ej2.min.mod.js"></script>
+    <!--
+    <link href="~/css/ej2-dropdowns-material.css" rel="stylesheet" />
+    <link href="~/css/ej2-buttons-material.css" rel="stylesheet" />
+    -->
+    <link href="https://cdn.syncfusion.com/ej2/material.css" rel="stylesheet">
+
+
+    <!-- FONT AWESEOM -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
+
+
+    @*
+        <environment include="Development">
+            <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+            <link rel="stylesheet" href="~/css/site.css" />
+        </environment>
+        <environment exclude="Development">
+            <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
+                  asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+                  asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+            <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        </environment>
+    *@
+
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" style="z-index:5000;">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Work In Progress    build: @HelperClassLib.Helpers.HelperClass.GetRevision()</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <!-- BAL -->
+                <ul class="nav navbar-nav">
+
+                    @if (this.User.IsInRole("ADMIN") || this.User.IsInRole("USER"))
+                    {
+                        <li><a asp-area="" asp-controller="Price" asp-action="Index">Price</a></li>
+                        <li><a asp-area="" asp-controller="Price" asp-action="Search">Search</a></li>
+                        <li><a asp-area="" asp-controller="Compare" asp-action="Index">Compare</a></li>
+                        <li><a asp-area="" asp-controller="Favorites" asp-action="Index">Favorites</a></li>
+                    }
+                    else
+                    {
+                        <li><a asp-area="" asp-controller="Price" asp-action="Search">Search</a></li>
+                    }
+
+
+
+                </ul>
+
+                <!-- JOBB -->
+                <ul class="nav navbar-nav navbar-right">
+                    @if (!this.User.IsInRole("ADMIN") && !this.User.IsInRole("USER"))
+                    {
+                        <!--<li><a asp-area="" asp-controller="Account" asp-action="Register">Sign Up</a></li>-->
+                        <li><a asp-area="" asp-controller="Account" asp-action="Login">Login</a></li>
+                    }
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+    <div id="bodycontent" class="container body-content">
+        @RenderBody()
+        <div id="footercontent">
+            <hr />
+            <footer>
+                <p>&copy; @DateTime.Today.Year - Work In Progress</p>
+            </footer>
+        </div>
+    </div>
+
+    @*
+        <environment include="Development">
+            <script src="~/lib/jquery/dist/jquery.js"></script>
+            <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+            <script src="~/js/site.js" asp-append-version="true"></script>
+        </environment>
+        <environment exclude="Development">
+            <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+                    asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                    asp-fallback-test="window.jQuery"
+                    crossorigin="anonymous"
+                    integrity="sha384-K+ctZQ+LL8q6tP7I94W+qzQsfRV2a+AfHIi9k8z8l9ggpc8X+Ytst4yBo/hH+8Fk">
+            </script>
+            <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
+                    asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                    asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                    crossorigin="anonymous"
+                    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
+            </script>
+            <script src="~/js/site.min.js" asp-append-version="true"></script>
+        </environment>
+    *@
+    @RenderSection("Scripts", required: false)
+    
+    <div id="HideEverything" style="visibility:hidden"></div>
+    <div id="loader" style="visibility:hidden"></div>
+</body>
+</html>

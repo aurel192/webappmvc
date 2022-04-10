@@ -1,0 +1,48 @@
+  /*
+  Értesít ha a Richter ára eléri a 5000 at,
+    VAGY
+  Richter ára eléri az 50 napos mozgóátlagot ÉS nincs túlvett tartományban az RSI(14)
+  */
+  {
+    "MultipleConditions": "A OR (B AND C)",
+    "Instrument": {
+      "instrumentType": "HungarianEquities",
+      "instrument": "RICHTER",
+      "Interval": "Daily"
+    },
+    "Conditions": [
+      {
+        "id": "A",
+        "description": "Richter goes above 5000",
+        "condition": {
+          "Signal": "HigherOrEqual",
+          "Value": 5000
+        }
+      },
+      {
+        "id": "B",
+        "description": "Richter Price Reaches 50 MA",
+        "condition": {
+          "Signal": "PriceReachMA",
+          "Value": 50
+        }
+      },
+      {
+        "id": "C",
+        "description": "Richter RSA(14) is lower than 70",
+        "condition": {
+          "Signal": "RSA(14) Lower",
+          "Value": 70
+        }
+      }
+    ]
+  }
+
+
+
+
+
+
+
+
+
